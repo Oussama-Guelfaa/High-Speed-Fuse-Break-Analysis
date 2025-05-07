@@ -64,17 +64,32 @@ cd High-Speed-Fuse-Break-Analysis
 pip install -r requirements.txt
 ```
 
-## Usage
+## Running the Project
 
-Run the main script with the video file:
+### Using the Command Line
+
+For a comprehensive analysis with all visualizations:
 
 ```bash
-python main.py --video_path Camera_15_04_58.mp4 --output_dir results
+python src/main.py --video_path data/Camera_15_04_58.mp4 --output_dir results --create_video --save_frames
 ```
+
+### Using Jupyter Notebook
+
+For an interactive analysis:
+
+1. Start Jupyter Notebook:
+```bash
+jupyter notebook
+```
+
+2. Open `notebooks/fuse_break_analysis_notebook.ipynb`
+
+3. Run the cells to perform the analysis step by step
 
 ### Command Line Arguments
 
-- `--video_path`: Path to the video file (default: 'Camera_15_04_58.mp4')
+- `--video_path`: Path to the video file (default: 'data/Camera_15_04_58.mp4')
 - `--output_dir`: Directory to save results (default: 'results')
 - `--calibration_frame`: Frame index to use for calibration (default: 1)
 - `--calibration_value_mm`: Known height (H) of the fuse in mm (default: 2.0)
@@ -86,12 +101,37 @@ python main.py --video_path Camera_15_04_58.mp4 --output_dir results
 
 The project follows a modular architecture with clear separation of concerns:
 
+```
+High-Speed-Fuse-Break-Analysis/
+├── data/                   # Input data directory
+│   └── Camera_15_04_58.mp4 # Sample video file
+├── docs/                   # Documentation
+│   └── exam_pratique_2017-2.pdf # Project requirements
+├── example_images/         # Example output images
+│   ├── distance_vs_frame.png
+│   └── key_frames.png
+├── notebooks/              # Jupyter notebooks
+│   ├── fuse_analysis.py    # Complete code as a Python module
+│   └── fuse_break_analysis_notebook.ipynb # Interactive notebook
+├── results/                # Output directory for results
+├── src/                    # Source code
+│   ├── image_processor.py  # Image processing module
+│   ├── main.py             # Main script
+│   ├── test_fuse_analysis.py # Unit tests
+│   ├── video_processor.py  # Video processing module
+│   └── visualization.py    # Visualization module
+├── .gitignore              # Git ignore file
+├── README.md               # Project documentation
+└── requirements.txt        # Dependencies
+```
+
 ### Core Modules
 
-- `main.py`: Main script that orchestrates the entire analysis workflow
-- `video_processor.py`: Handles video loading, frame extraction, and basic video properties
-- `image_processor.py`: Implements the image processing pipeline, segmentation, and distance measurement
-- `visualization.py`: Creates all visualizations, plots, and video outputs
+- `src/main.py`: Main script that orchestrates the entire analysis workflow
+- `src/video_processor.py`: Handles video loading, frame extraction, and basic video properties
+- `src/image_processor.py`: Implements the image processing pipeline, segmentation, and distance measurement
+- `src/visualization.py`: Creates all visualizations, plots, and video outputs
+- `notebooks/fuse_analysis.py`: Complete code as a single Python module for easy import
 
 ### Class Structure
 
@@ -115,22 +155,14 @@ The project follows a modular architecture with clear separation of concerns:
 4. Results are collected, smoothed, and visualized
 5. Outputs are saved to the specified directory
 
-## Running the Project
+## Additional Usage Examples
 
 ### Basic Usage
 
 For a quick analysis with default parameters:
 
 ```bash
-python main.py --video_path Camera_15_04_58.mp4
-```
-
-### Complete Analysis with All Outputs
-
-For a comprehensive analysis with all visualizations:
-
-```bash
-python main.py --video_path Camera_15_04_58.mp4 --output_dir results --create_video --save_frames
+python src/main.py --video_path data/Camera_15_04_58.mp4
 ```
 
 ### Custom Calibration
@@ -138,7 +170,7 @@ python main.py --video_path Camera_15_04_58.mp4 --output_dir results --create_vi
 If you know the exact height of the fuse in millimeters:
 
 ```bash
-python main.py --video_path Camera_15_04_58.mp4 --calibration_value_mm 2.5
+python src/main.py --video_path data/Camera_15_04_58.mp4 --calibration_value_mm 2.5
 ```
 
 ### Using a Different Calibration Frame
@@ -146,7 +178,7 @@ python main.py --video_path Camera_15_04_58.mp4 --calibration_value_mm 2.5
 If the first frame isn't suitable for calibration:
 
 ```bash
-python main.py --video_path Camera_15_04_58.mp4 --calibration_frame 5
+python src/main.py --video_path data/Camera_15_04_58.mp4 --calibration_frame 5
 ```
 
 ### Testing the Implementation
@@ -154,6 +186,7 @@ python main.py --video_path Camera_15_04_58.mp4 --calibration_frame 5
 Run the included unit tests to verify the functionality:
 
 ```bash
+cd src
 python -m unittest test_fuse_analysis.py
 ```
 
