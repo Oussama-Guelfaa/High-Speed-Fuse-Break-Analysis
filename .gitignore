@@ -78,3 +78,17 @@ test_results/
 # Exception for example images
 !example_images/*.png
 !example_images/*.jpg
+
+# Documentation
+docs/build/
+docs/source/_build/
+docs/source/generated/
+
+# macOS files
+.DS_Store
+
+# GitHub Pages
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
