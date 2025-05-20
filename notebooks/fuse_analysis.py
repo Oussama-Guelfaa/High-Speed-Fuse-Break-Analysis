@@ -227,10 +227,11 @@ class FuseImageProcessor:
         h_pixels = max(heights)  # Use the largest height as H
 
         # Calculate pixels per mm
-        self.pixels_per_mm = h_pixels / self.calibration_value_mm
+        # Dividing by 10 times the calibration value effectively multiplies the distance scale by 10
+        self.pixels_per_mm = h_pixels / (self.calibration_value_mm / 10)
         self.calibrated = True
 
-        print(f"Calibration complete: {self.pixels_per_mm:.2f} pixels/mm")
+        print(f"Calibration complete: {self.pixels_per_mm:.2f} pixels/mm (scale multiplied by 10)")
         return self.pixels_per_mm
 
     def measure_distance(self, image: np.ndarray) -> Optional[float]:
@@ -302,6 +303,8 @@ class FuseImageProcessor:
         distance_pixels = max(0, right_edge - left_edge)
         distance_mm = distance_pixels / self.pixels_per_mm
 
+        # Note: The distance is already multiplied by 10 due to our calibration change
+
         # Apply a threshold to avoid noise
         if distance_mm < 0.1:  # Minimum meaningful distance
             return 0.0
@@ -332,7 +335,7 @@ class FuseImageProcessor:
         # Add distance measurement text
         cv2.putText(
             vis_img,
-            f"d = {distance_mm:.3f} mm",
+            f"d = {distance_mm:.3f} mm (échelle x10)",
             (10, 30),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.7,
@@ -383,8 +386,8 @@ class FuseAnalysisVisualizer:
             plt.legend()
 
         plt.xlabel('Frame')
-        plt.ylabel('Distance (mm)')
-        plt.title(title)
+        plt.ylabel('Distance (mm) - Échelle x10')
+        plt.title(f"{title} - Échelle multipliée par 10")
         plt.grid(True)
 
         # Set y-axis to start at 0
@@ -604,7 +607,7 @@ def main():
         frame_indices,
         smoothed_distances,  # Use smoothed data for the main plot
         original_distances=distances,  # Also show original data
-        title="Fuse Breaking Distance vs Frame",
+        title="Distance entre les éléments du fusible en fonction du temps",
         save_path=plot_path
     )
 
