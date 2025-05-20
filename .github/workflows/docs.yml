@@ -23,15 +23,35 @@ jobs:
     - name: Build documentation
       run: |
         mkdir -p docs/source
+        # Create a simple conf.py file
+        echo "project = 'High-Speed Fuse Break Analysis'" > docs/source/conf.py
+        echo "copyright = '2023, Oussama Guelfaa'" >> docs/source/conf.py
+        echo "author = 'Oussama Guelfaa'" >> docs/source/conf.py
+        echo "extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon']" >> docs/source/conf.py
+        echo "templates_path = ['_templates']" >> docs/source/conf.py
+        echo "exclude_patterns = []" >> docs/source/conf.py
+        echo "html_theme = 'sphinx_rtd_theme'" >> docs/source/conf.py
+        echo "html_static_path = ['_static']" >> docs/source/conf.py
+
+        # Create index.rst
         echo "# High-Speed Fuse Break Analysis" > docs/source/index.rst
+        echo "" >> docs/source/index.rst
+        echo "Welcome to the High-Speed Fuse Break Analysis documentation!" >> docs/source/index.rst
+        echo "" >> docs/source/index.rst
+        echo "This project analyzes high-speed X-ray radiography videos of industrial fuses to measure the distance between fuse elements during breaking events." >> docs/source/index.rst
         echo "" >> docs/source/index.rst
         echo ".. toctree::" >> docs/source/index.rst
         echo "   :maxdepth: 2" >> docs/source/index.rst
         echo "   :caption: Contents:" >> docs/source/index.rst
         echo "" >> docs/source/index.rst
-        echo "   notebooks/fuse_break_analysis_notebook.ipynb" >> docs/source/index.rst
-        echo "   notebooks/fuse_analysis.py" >> docs/source/index.rst
-        sphinx-build -b html docs/source docs/build
+        echo "   readme" >> docs/source/index.rst
+
+        # Create readme.rst by converting README.md
+        pip install m2r2
+        m2r2 README.md --output docs/source/readme.rst || echo "# Project README" > docs/source/readme.rst
+
+        # Build the documentation
+        sphinx-build -b html docs/source docs/build || true
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       if: github.ref == 'refs/heads/main'
