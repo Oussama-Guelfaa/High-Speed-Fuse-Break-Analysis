@@ -1,5 +1,10 @@
 # High-Speed Fuse Break Analysis
 
+[![Python Linting](https://github.com/Oussama-Guelfaa/High-Speed-Fuse-Break-Analysis/actions/workflows/python-lint.yml/badge.svg)](https://github.com/Oussama-Guelfaa/High-Speed-Fuse-Break-Analysis/actions/workflows/python-lint.yml)
+[![Python Tests](https://github.com/Oussama-Guelfaa/High-Speed-Fuse-Break-Analysis/actions/workflows/python-test.yml/badge.svg)](https://github.com/Oussama-Guelfaa/High-Speed-Fuse-Break-Analysis/actions/workflows/python-test.yml)
+[![Documentation](https://github.com/Oussama-Guelfaa/High-Speed-Fuse-Break-Analysis/actions/workflows/docs.yml/badge.svg)](https://github.com/Oussama-Guelfaa/High-Speed-Fuse-Break-Analysis/actions/workflows/docs.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This project analyzes high-speed X-ray radiography videos of industrial fuses to measure the distance between fuse elements during breaking events. It processes video frames to track how the gap between fuse elements changes over time when an electric arc is generated.
 
 ## Overview
@@ -66,17 +71,9 @@ pip install -r requirements.txt
 
 ## Running the Project
 
-### Using the Command Line
-
-For a comprehensive analysis with all visualizations:
-
-```bash
-python src/main.py --video_path data/Camera_15_04_58.mp4 --output_dir results --create_video --save_frames
-```
-
 ### Using Jupyter Notebook
 
-For an interactive analysis:
+The project is now primarily based on Jupyter notebooks for better revision and understanding:
 
 1. Start Jupyter Notebook:
 ```bash
@@ -87,15 +84,19 @@ jupyter notebook
 
 3. Run the cells to perform the analysis step by step
 
-### Command Line Arguments
+### Installation as a Package
 
-- `--video_path`: Path to the video file (default: 'data/Camera_15_04_58.mp4')
-- `--output_dir`: Directory to save results (default: 'results')
-- `--calibration_frame`: Frame index to use for calibration (default: 1)
-- `--calibration_value_mm`: Known height (H) of the fuse in mm (default: 2.0)
-- `--save_frames`: Save processed frames (flag)
-- `--create_video`: Create video with measurements (flag)
-- `--fps`: Frames per second for output video (default: 10)
+You can also install the project as a package:
+
+```bash
+pip install -e .
+```
+
+This allows you to import the modules in your own Python scripts:
+
+```python
+from notebooks.fuse_analysis import VideoProcessor, FuseImageProcessor, FuseAnalysisVisualizer
+```
 
 ## Project Structure
 
@@ -103,9 +104,16 @@ The project follows a modular architecture with clear separation of concerns:
 
 ```
 High-Speed-Fuse-Break-Analysis/
+├── .github/                # GitHub configuration
+│   └── workflows/          # GitHub Actions workflows
+│       ├── docs.yml        # Documentation workflow
+│       ├── python-lint.yml # Linting workflow
+│       └── python-test.yml # Testing workflow
 ├── data/                   # Input data directory
 │   └── Camera_15_04_58.mp4 # Sample video file
 ├── docs/                   # Documentation
+│   ├── source/             # Sphinx documentation source
+│   ├── build/              # Generated documentation
 │   └── exam_pratique_2017-2.pdf # Project requirements
 ├── example_images/         # Example output images
 │   ├── distance_vs_frame.png
@@ -114,24 +122,20 @@ High-Speed-Fuse-Break-Analysis/
 │   ├── fuse_analysis.py    # Complete code as a Python module
 │   └── fuse_break_analysis_notebook.ipynb # Interactive notebook
 ├── results/                # Output directory for results
-├── src/                    # Source code
-│   ├── image_processor.py  # Image processing module
-│   ├── main.py             # Main script
-│   ├── test_fuse_analysis.py # Unit tests
-│   ├── video_processor.py  # Video processing module
-│   └── visualization.py    # Visualization module
+├── tests/                  # Test directory
+│   └── test_fuse_analysis.py # Unit tests
 ├── .gitignore              # Git ignore file
+├── CONTRIBUTING.md         # Contribution guidelines
+├── LICENSE                 # MIT License
 ├── README.md               # Project documentation
-└── requirements.txt        # Dependencies
+├── requirements.txt        # Dependencies
+└── setup.py                # Package setup script
 ```
 
-### Core Modules
+### Core Components
 
-- `src/main.py`: Main script that orchestrates the entire analysis workflow
-- `src/video_processor.py`: Handles video loading, frame extraction, and basic video properties
-- `src/image_processor.py`: Implements the image processing pipeline, segmentation, and distance measurement
-- `src/visualization.py`: Creates all visualizations, plots, and video outputs
 - `notebooks/fuse_analysis.py`: Complete code as a single Python module for easy import
+- `notebooks/fuse_break_analysis_notebook.ipynb`: Interactive Jupyter notebook for step-by-step analysis
 
 ### Class Structure
 
@@ -155,39 +159,18 @@ High-Speed-Fuse-Break-Analysis/
 4. Results are collected, smoothed, and visualized
 5. Outputs are saved to the specified directory
 
-## Additional Usage Examples
-
-### Basic Usage
-
-For a quick analysis with default parameters:
-
-```bash
-python src/main.py --video_path data/Camera_15_04_58.mp4
-```
-
-### Custom Calibration
-
-If you know the exact height of the fuse in millimeters:
-
-```bash
-python src/main.py --video_path data/Camera_15_04_58.mp4 --calibration_value_mm 2.5
-```
-
-### Using a Different Calibration Frame
-
-If the first frame isn't suitable for calibration:
-
-```bash
-python src/main.py --video_path data/Camera_15_04_58.mp4 --calibration_frame 5
-```
-
-### Testing the Implementation
+## Testing
 
 Run the included unit tests to verify the functionality:
 
 ```bash
-cd src
-python -m unittest test_fuse_analysis.py
+pytest
+```
+
+Or with coverage report:
+
+```bash
+pytest --cov=notebooks tests/
 ```
 
 ## Results and Outputs
